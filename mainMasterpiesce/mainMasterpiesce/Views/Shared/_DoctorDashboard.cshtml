@@ -1,0 +1,375 @@
+﻿@model Tuple<List<mainMasterpiesce.Models.doctor>, List<mainMasterpiesce.Models.appointment>, List<mainMasterpiesce.Models.feedback>>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Doccure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <!-- Favicons -->
+    <link href="~/doc/assets/img/favicon.png" rel="icon">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/doc/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/doc/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/doc/assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/doc/assets/css/style.css">
+
+
+
+    @*admin*@
+
+    <!-- Favicon -->
+    <script src="https://kit.fontawesome.com/cd43dd9542.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="~/doc/admin/assets/img/favicon.png">
+    @*<img src="~/doc/admin/assets/img/favicon.png" />*@
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/doc/admin/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/doc/admin/assets/css/font-awesome.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="~/doc/admin/assets/css/feathericon.min.css">
+
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="~/doc/admin/assets/plugins/datatables/datatables.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/doc/admin/assets/css/style.css">
+    @*admin*@
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="assets/js/html5shiv.min.js"></script>
+            <script src="assets/js/respond.min.js"></script>
+        <![endif]-->
+</head>
+<body>
+    @RenderPage("~/Views/Shared/_NAVBARDOCTOR.cshtml")
+
+    <!-- /Header -->
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar" style="background-color:transparent">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+
+                    <!-- Profile Sidebar -->
+                    <div class="profile-sidebar">
+                        <div class="widget-profile pro-widget-content">
+                            <div class="profile-info-widget">
+                                <a href="#" class="booking-doc-img">
+                                    <img src="@Url.Content(@Model.Item1[0].picdoctor)" alt="User Image">
+                                </a>
+
+                                <div class="profile-det-info">
+                                    <h3>Dr-@Model.Item1[0].doctorName</h3>
+
+                                    <div class="patient-details">
+                                        @if (Model.Item1[0].specialization1 != null)
+                                        {
+
+
+
+                                            <h5 class="mb-0">@Model.Item1[0].specialization1.namespecialization</h5>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-widget">
+                            @{
+
+                                string url = Request.Url.AbsoluteUri; // get the absolute URL of the current request
+                                string[] segments = url.Split('/'); // split the URL into segments
+                                string lastSegment = segments[segments.Length - 1]; }
+                            <nav class="dashboard-menu">
+
+
+
+                                <ul>
+                                    <li class="@(lastSegment == "DoctorDashboard" ? "active" : "")">
+                                        <a href="DoctorDashboard">
+                                            <i class="fas fa-columns"></i>
+                                            <span>Appointments</span>
+                                        </a>
+                                    </li>
+
+
+
+
+
+                                    <li class="@(lastSegment == "NotAvailable" ? "active" : "")">
+                                        <a href="NotAvailable">
+                                            <i class="fas fa-hourglass-start"></i>
+                                            <span>Schedule Timings</span>
+                                        </a>
+                                    </li>
+                                    <li class="@((lastSegment == "MyReviews" || lastSegment == "PendingReviews") ? "active" : "")">
+                                        <a href="MyReviews">
+                                            <i class="fas fa-star"></i>
+                                            <span>Reviews</span>
+                                        </a>
+                                    </li>
+
+
+
+
+
+                                    <li class="@(lastSegment == "DoctorDashSetting" ? "active" : "")">
+                                        <a href="DoctorDashSetting">
+                                            <i class="fas fa-user-cog"></i>
+                                            <span>Profile Settings</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="@(lastSegment == "changepassworddoctor" ? "active" : "")">
+                                        <a href="changepassworddoctor">
+                                            <i class="fas fa-lock"></i>
+                                            <span>Change Password</span>
+                                        </a>
+                                    </li>
+
+
+
+
+                                    <li>
+                                        <a href="@Url.Action("LogOfff", "Account")">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            <span>Logout</span>
+                                        </a>
+                                    </li>
+
+
+
+
+
+
+
+
+
+
+
+                                </ul>
+
+
+
+</nav>
+                        </div>
+                    </div>
+                    <!-- /Profile Sidebar -->
+
+                </div>
+
+
+
+
+
+
+
+
+                @RenderBody()
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer" style="background-color: #15767D ">
+
+        <!-- Footer Top -->
+        <div class="footer-top">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+
+                        <!-- Footer Widget -->
+                        <div class="footer-widget footer-about">
+                            <div class="footer-logo">
+                                @*<img src="assets/img/footer-logo.png" alt="logo">*@
+
+                                <a href="~/mainHome/Index" class=""><img src="~/Content/images/logo.png" width="80" alt="logo" style="padding:0px !important;margin-left:50px !important" /></a>
+                            </div>
+                            <div class="footer-about-content">
+                                <p>
+                                    Welcome to Finding Peace, a revolutionary psychological website .
+                                </p>
+                                <div class="social-icon">
+                                    <ul>
+                                        <li>
+                                            <a href="https://web.facebook.com/musab.alghannam.3" target="_blank"><i class="fab fa-facebook-f"></i> </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://twitter.com/MusabGhann7856" target="_blank"><i class="fab fa-twitter"></i> </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://www.linkedin.com/in/musab-ghannam-0a8284253" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="https://www.instagram.com/musab_ghannam/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="https://dribbble.com/musabghannam" target="_blank"><i class="fab fa-dribbble"></i> </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Footer Widget -->
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <!-- Footer Widget -->
+                        <div class="footer-widget footer-menu">
+                            <h2 class="footer-title">For Patients</h2>
+
+                            <ul>
+                                <li><a href="~/mainHome/Index"><i class="fas fa-angle-double-right"></i> Home page</a></li>
+                                <li>
+                                    <a href="~/mainHome/About">
+                                        <i class="fas fa-angle-double-right"></i> About Us
+                                    </a>
+                                </li>
+                                <li><a href="~/mainHome/ConTact"><i class="fas fa-angle-double-right"></i> Contact Us</a></li>
+
+                            </ul>
+                        </div>
+                        <!-- /Footer Widget -->
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <!-- Footer Widget -->
+                        <div class="footer-widget footer-menu">
+                            <h2 class="footer-title">Links</h2>
+
+                            <ul>
+                                <li style="">
+                                    <a href="~/Account/Register"><i class="fas fa-angle-double-right"></i> Register</a>
+                                </li>
+                                <li style="">
+                                    <a href="~/DoctorsInfo/alldoctors"><i class="fas fa-angle-double-right"></i> Therapist List</a>
+                                </li>
+                                <li>
+                                    <a href="~/Account/Login">
+                                        <i class="fas fa-angle-double-right"></i>
+                                        Log in
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /Footer Widget -->
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <!-- Footer Widget -->
+                        <div class="footer-widget footer-contact">
+                            <h2 class="footer-title">Contact Us</h2>
+                            <div class="footer-contact-info">
+                                <div class="footer-address">
+                                    <span><i class="fas fa-map-marker-alt"></i></span>
+                                    <p> 3556 Beech Street, San Francisco,<br> California, CA 94108 </p>
+                                </div>
+                                <p>
+                                    <i class="fas fa-phone-alt"></i>
+                                    +962780396098
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-envelope"></i>
+                                    doccure@example.com
+                                </p>
+                            </div>
+                        </div>
+                        <!-- /Footer Widget -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /Footer Top -->
+        <!-- Footer Bottom -->
+   
+        <!-- /Footer Bottom -->
+
+    </footer>
+    <!-- /Main Wrapper -->
+    <!-- jQuery -->
+    <script src="~/doc/assets/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/doc/assets/js/popper.min.js"></script>
+    <script src="~/doc/assets/js/bootstrap.min.js"></script>
+
+    <!-- Sticky Sidebar JS -->
+    <script src="~/doc/assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
+    <script src="~/doc/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
+
+    <!-- Circle Progress JS -->
+    <script src="~/doc/assets/js/circle-progress.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="~/doc/assets/js/script.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+
+
+    @*admin*@
+
+    <!-- jQuery -->
+    <script src="~/doc/admin/assets/js/jquery-3.2.1.min.js"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/doc/admin/assets/js/popper.min.js"></script>
+    <script src="~/doc/admin/assets/js/bootstrap.min.js"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="~/doc/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Datatables JS -->
+    <script src="~/doc/admin/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/doc/admin/plugins/datatables/datatables.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="~/doc/admin/assets/js/script.js"></script>
+
+    @*admin*@
+
+</body>
+</html>

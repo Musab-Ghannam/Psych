@@ -1,0 +1,583 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "EnrollDoctor";
+    Layout = "~/Views/Shared/mainLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+
+<style>
+    textarea::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .form-control {
+        padding: 0 !important
+    }
+
+    .gradient-custom {
+        background: #f093fb;
+        background: -webkit-linear-gradient(to bottom right, #020031, rgb(236, 187, 152));
+        background: linear-gradient(to bottom right, #020031, rgb(236, 187, 152));
+    }
+
+    .button11 {
+        background-color: #f6783a;
+    }
+</style>
+
+@using (Html.BeginForm("EnrollDoctor", "DoctorEnrolling", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="gradient-custom">
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+        <section class="h-100 gradient-custom">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card card-registration my-4">
+                            <div class="row g-0">
+                                <div class="col-xl-6 d-none d-xl-block">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                         alt="Sample photo" class="img-fluid"
+                                         style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                                </div>
+                                <div class="col-xl-5">
+                                    <div class="card-body p-md-7 text-black">
+                                        <h3 class="mb-5 text-uppercase">Request Form</h3>
+
+
+                                        <div class="form-outline" style="display:flex;justify-content:space-between">
+
+                                            <div style="">
+
+
+                                                <select class="form-control" id="specializationsearch" name="specializationId" required>
+                                                    <option name="specializationId" value="@Model.Specializations[0].specializationId">-- Select a specialization --</option>
+
+                                                    @foreach (var specialization in Model.Specializations)
+                                                    {
+
+
+
+
+                                                        <option name="specializationId" value="@specialization.specializationId">@specialization.namespecialization</option>
+                                                    }
+
+
+
+                                                </select>
+                                            </div>
+                                            <div style="width:47%">
+
+                                                <input name="edu" type="text" placeholder="your education" class="form-control" style="text-align:center;" required oninput="education(this)" />
+
+
+                                                @*@Html.ValidationMessageFor(model => Model.doc[0].IBAN, "", new { @class = "text-danger" })*@
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <p id="error_messageed" style="color:darkred"></p>
+                                        <div style="display:flex;justify-content:space-between">
+
+                                            <input type="text" name="location" placeholder="Address" class="form-control" style="text-align:center;width:47%;margin-top:20px" required oninput="AddressInput(this)" />
+                                            <input type="text" name="locationLink" placeholder="location_Link " class="form-control" style="text-align:center;width:47%;margin-top:20px" required />
+
+
+                                        </div>
+                                        <p id="error_messageAddrees" style="color:darkred"></p>
+                                        <div style="display:flex;justify-content:space-between">
+
+                                            <input type="number" name="price" placeholder="price per hour" class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3" />
+                                            <input type="text" name="qualif" placeholder="qualification " class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="qualificInput(this)" />
+
+
+                                        </div>
+
+                                        <p id="error_messagequalific" style="color:darkred"></p>
+                                        <div style="display:flex;justify-content:space-between">
+
+                                            <input type="text" name="Iban" placeholder="IBAN" class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="handleSearchInput(this)" />
+
+
+                                            <input type="number" name="exp" placeholder="number of experience" class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="handleexpireInput(this)" />
+
+
+                                        </div>
+                                        <p id="error_message" style="color:darkred"></p>
+                                        <p id="error_message1" style="color:darkred"></p>
+                                        <div style="display:flex;justify-content:space-between">
+
+                                            <input type="text" name="University" placeholder="University" class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="universityInput(this)" />
+                                            <input type="text" name="yeargrad" placeholder="Year of graduted" class="form-control" style="text-align:center;width:47%;margin-top:30px" required oninput="year(this)" />
+
+
+                                        </div>
+                                        <p id="error_messageuniv" style="color:darkred"></p>
+                                        <p id="error_messageyear" style="color:darkred"></p>
+                                        <div style="display:flex;justify-content:space-between">
+
+                                            <textarea name="info" placeholder="tell me about you" class="form-control" style="text-align:center;align-items:center;margin-top:35px;display:flex;justify-content:center" rows="4" required oninput="yourself(this)"></textarea>
+
+
+
+                                        </div>
+                                        <p id="error_messageyou" style="color:darkred"></p>
+                                        <div class="col-md-6 mb-3">
+
+                                            <div class="form-outline">
+
+
+                                                <h6> @*@Html.LabelFor(model => model.NationalNum, "National Number", htmlAttributes: new { @class = "control-label" })*@</h6>
+
+                                                <div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <h6>@*@Html.LabelFor(model => model.Grad, "High School Grade", htmlAttributes: (new { @class = "control-label" }))*@</h6>
+                                                <div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <h6>
+                                                    @*@Html.LabelFor(model => model.PhoneNumber, "Phone Number", htmlAttributes: new { @class = "control-label" })*@
+                                                </h6>
+                                                <div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-4">
+                                            <div>
+                                                <h6>
+                                                    @*@Html.LabelFor(model => model.Pic, "Personal Image", htmlAttributes: new { @class = "control-label" })*@
+                                                </h6>
+                                                <div class="col-md-10">
+                                                    <label>Personal Id</label>
+                                                    <input type="file" name="PersonalIdFile1" id="PersonalIdFile1" class="form-control-file" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+                                                    @*<input type="file" name="Pic1" class="form-control-file" accept="image/*" required />*@
+                                                    @*@Html.EditorFor(model => model.Pic, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @*@Html.ValidationMessageFor(model => model.Pic, "", new { @class = "text-danger" })*@
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div>
+                                                <h6>
+                                                    @*@Html.LabelFor(model => model.PersonalIdFile, "Identity Certificate@*", htmlAttributes: new { @class = "control-label" })*@
+                                                </h6>
+                                                <div class="col-md-10">
+                                                    <label>Certification</label>
+
+                                                    @*<input type="file" name="Certification" class="form-control-file" id="certification" required />*@
+
+                                                    <input type="file" name="Certification" class="form-control-file" id="certification" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+                                                    @*@Html.ValidationMessageFor(model => model.PersonalIdFile, "", new { @class = "text-danger" })*@
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <h6>
+                                                    @*@Html.LabelFor(model => model.CertificateFile, "High School Certificate", htmlAttributes: new { @class = "control-label" })*@
+                                                </h6>
+                                                <div class="col-md-10">
+                                                    <label>Birth file</label>
+                                                    <input type="file" name="BirthFile1" class="form-control-file" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+                                                    @*@Html.ValidationMessageFor(model => model.CertificateFile, "", new { @class = "text-danger" })*@
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <h6>
+                                                    @*@Html.LabelFor(model => model.BirthFile, "Birth Certificate", htmlAttributes: new { @class = "control-label" })*@
+                                                </h6>
+                                                <div class="col-md-10">
+                                                    <label>Experience </label>
+                                                    <input type="file" name="ExperienceFile1" class="form-control-file" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+                                                    @*@Html.ValidationMessageFor(model => model.BirthFile, "", new { @class = "text-danger" })*@
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <div class="form-outline">
+                                                <h6>@*@Html.LabelFor(model => model.Gender, "Gender", htmlAttributes: new { @class = "control-label" })*@</h6>
+                                                <div>
+                                                    <div class="checkbox">
+                                                        @*@Html.EditorFor(model => model.Gender)*@
+
+                                                        @*@Html.RadioButton("Gender", "false", false, new { id = "male" }) Male
+
+                                                            @Html.RadioButton("Gender", "true", false, new { id = "female" }) Female
+
+                                                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })*@
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end pt-3">
+                                        <div class=" col-md-6">
+                                            <input type="submit" value="Submit" class="btn button11 btn-lg col-md-6" style="background-color:#20BBBD" id="submit_button" />
+                                        </div>
+                                        @*<input type="submit" value="Submit" class="btn btn-light btn-lg col-md-6" />*@
+                                        <div class=" col-md-6">
+                                            <a href="/mainHome/Index" class="btn button11 btn-lg" style="color: black; background-color: #20BBBD; ">Home</a>
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
+    @if (TempData["swal_message"] != null && TempData["swal_message"] != $"please complete your request in this form" && TempData["swal_message"] != "Dear Doctor,Please be advised that your documentation is currently being reviewed by our team. Once your documentation has been accepted, you will receive an email from us confirming your acceptance.Thank you for your patience and we wish you the best of luck.")
+    {
+        <script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+
+             allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+
+
+        }).then(function () {
+            window.location.href = "@ViewBag.redirectUrl";
+        });;
+        </script>
+    }
+
+
+    @if ( TempData["swal_message"] == "Dear Doctor,Please be advised that your documentation is currently being reviewed by our team. Once your documentation has been accepted, you will receive an email from us confirming your acceptance.Thank you for your patience and we wish you the best of luck.")
+    {
+<script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+
+             allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+
+
+        }).then(function () {
+            window.location.href = "/Account/LogOfff";
+        });;
+</script>
+    }
+
+
+
+
+
+
+
+
+
+    @if (TempData["swal_message"] == $"please complete your request in this form")
+    {
+        <script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+
+             allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+
+
+        }).then(function () {
+            window.location.href = location.pathname
+        });;
+        </script>
+    }
+
+
+
+
+
+
+    <script>
+
+
+        function handleSearchInput(input) {
+            if (input.value.length > 24) {
+                input.value = input.value.slice(0, 16);
+            }
+
+            if (input.value.length < 23) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_message").textContent = "IBan should be at least 23 digits.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_message").textContent = "";
+            }
+        }
+        function AddressInput(input) {
+            if (input.value.length > 15) {
+                input.value = input.value.slice(0, 16);
+            }
+            if (/\d|\-|\./.test(input.value)) {
+                // Prevent non-alphabetic characters from being entered
+                input.value = input.value.replace(/[\d\-\.]/g, '');
+            }
+            if (input.value.length < 4) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messageAddrees").textContent = "Addrees should be at least 4 digits.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messageAddrees").textContent = "";
+            }
+        }
+        function qualificInput(input) {
+            if (input.value.length > 20) {
+                input.value = input.value.slice(0, 20);
+            }
+            if (/\d|\-|\./.test(input.value)) {
+                // Prevent non-alphabetic characters from being entered
+                input.value = input.value.replace(/[\d\-\.]/g, '');
+            }
+            if (input.value.length < 4) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messagequalific").textContent = "qualification  should be at least 4 digits.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messagequalific").textContent = "";
+            }
+        }
+
+
+        function universityInput(input) {
+            if (input.value.length > 20) {
+                input.value = input.value.slice(0, 20);
+            }
+            if (/\d|\-|\./.test(input.value)) {
+                // Prevent non-alphabetic characters from being entered
+                input.value = input.value.replace(/[\d\-\.]/g, '');
+            }
+            if (input.value.length < 4) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messageuniv").textContent = "University  should be at least 4 charachters.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messageuniv").textContent = "";
+            }
+        }
+        function handleexpireInput(input) {
+            if (input.value.length > 2) {
+                input.value = input.value.slice(0, 2);
+            }
+            if (isNaN(input.value)) {
+                // Prevent non-numeric characters from being entered
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+            //if (input.value.length < 2) {
+            //    // Disable the submit button
+            //    document.getElementById("submit_button").disabled = true;
+            //    // Or display an error message
+            //    document.getElementById("error_message1").textContent = "experience should be at least 2 digits.";
+            //} else {
+            //    // Enable the submit button
+            //    document.getElementById("submit_button").disabled = false;
+            //    // Clear the error message
+            //    document.getElementById("error_message1").textContent = "";
+            //}
+        }
+        function education(input) {
+            if (input.value.length > 10) {
+                input.value = input.value.slice(0, 10);
+            }
+            if (/\d|\-|\./.test(input.value)) {
+                // Prevent non-alphabetic characters from being entered
+                input.value = input.value.replace(/[\d\-\.]/g, '');
+            }
+            if (input.value.length < 5) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messageed").textContent = "Education should be at least 5 characters.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messageed").textContent = "";
+            }
+        }
+
+        function handleexpireInput(input) {
+            if (input.value.length > 2) {
+                input.value = input.value.slice(0, 2);
+            }
+            if (isNaN(input.value)) {
+                // Prevent non-numeric characters from being entered
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+            if (input.value.length < 2) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_message1").textContent = "Expiration date should be at least 2 digits.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_message1").textContent = "";
+            }
+        }
+
+
+        function year(input) {
+
+            if (input.value.length > 4) {
+                input.value = input.value.slice(0, 4);
+            }
+            if (isNaN(input.value)) {
+
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+            if (input.value.length < 4 || input.value > 2018 || input.value < 1965) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messageyear").textContent = "the year should be at least 4 digits and should be between 1965 and 2018.";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messageyear").textContent = "";
+            }
+        }
+
+
+        function yourself(input) {
+            if (input.value.length > 250) {
+                input.value = input.value.slice(0, 250);
+            }
+
+            if (input.value.length < 40) {
+                // Disable the submit button
+                document.getElementById("submit_button").disabled = true;
+                // Or display an error message
+                document.getElementById("error_messageyou").textContent = "this field should be at least 40 charachters and maximum 250 charachters";
+            } else {
+                // Enable the submit button
+                document.getElementById("submit_button").disabled = false;
+                // Clear the error message
+                document.getElementById("error_messageyou").textContent = "";
+            }
+        }
+
+
+
+
+
+        // Get the file input element
+        const certificationInput = document.getElementById("certification");
+
+        // Add an event listener to the input element
+        certificationInput.addEventListener("change", function () {
+            // Get the selected file
+            const file = certificationInput.files[0];
+
+            // Get the file type
+            const fileType = file.type;
+
+            // Check if the file type is not pdf or doc or docx
+            if (fileType !== "application/pdf" && fileType !== "application/msword" && fileType !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                // Alert the user
+                alert("Only PDF, DOC, and DOCX files are allowed.");
+
+                // Clear the file input
+                certificationInput.value = "";
+            }
+        });
+
+        var fileInput = document.querySelector('.form-control-file');
+        // Add an event listener to the input element
+        fileInput.addEventListener("change", function () {
+            // Get the selected file
+            const file = fileInput.files[0];
+
+            // Get the file type
+            const fileType = file.type;
+
+            // Check if the file type is not pdf or doc or docx
+            if (fileType !== "application/pdf" && fileType !== "application/msword" && fileType !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                // Alert the user
+                alert("Only PDF, DOC, and DOCX files are allowed.");
+
+                // Clear the file input
+                fileInput.value = "";
+            }
+        });
+
+
+
+
+
+
+    </script>

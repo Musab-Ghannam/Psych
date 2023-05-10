@@ -1,0 +1,303 @@
+﻿@model Tuple<List<mainMasterpiesce.Models.doctor>, List<mainMasterpiesce.Models.appointment>, List<mainMasterpiesce.Models.feedback>>
+@using System.Globalization;
+@{
+    ViewBag.Title = "MyReviews";
+    Layout = "~/Views/Shared/_DoctorDashboard.cshtml";
+}
+
+<script src="https://kit.fontawesome.com/cd43dd9542.js" crossorigin="anonymous"></script>
+<style>
+  #accept{
+      font-weight:bold;
+      font-size:17px;
+
+  }
+</style>
+
+
+
+<div class="col-md-7 col-lg-8 col-xl-9">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <ul class="breadcrumb">
+                    <li id="accept"><a href="MyReviews">Accepted Reviews/</a></li>
+                    <li id="reject"><a href="PendingReviews">Pending Reviews</a></li>
+                </ul>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    @*start acceptreviews*@
+    <div class="doc-review review-listing appointments" id="previous-appointments">
+
+        <!-- Review Listing -->
+        <ul class="comments-list">
+
+            <!-- Comment List -->
+            @foreach (var comment in Model.Item3.Where(c => c.statefeedback == 1))
+            {
+               
+
+
+                <li>
+
+
+                    <div class="comment">
+                        <img class="avatar rounded-circle" alt="User Image"
+                             src="~/Content/images/@Url.Content(comment.patient.picpatient)">
+                        <div class="comment-body">
+                            <div class="meta-data">
+                                <span class="comment-author">@comment.patient.patientName</span>
+                                <span class="comment-date">
+
+
+                                    Reviewed at  @comment.feedbacktime.Value.ToString("dd-MM-yyyy")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </span>
+                                <div class="review-count rating">
+                                    @for (int i = 0; i < comment.rating; i++)
+                                    {
+                                        <i class="fas fa-star filled"></i>
+                                    }
+                                    @for (int i = 0; i < 5 - comment.rating; i++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+
+
+                                </div>
+                            </div>
+                            <p class="recommended">
+                                <i class="far fa-thumbs-up"></i> I recommend the
+                                doctor
+                            </p>
+                            <p class="comment-content">
+                                @comment.comment
+                            </p>
+                            <div class="comment-reply">
+                                <a class="comment-btn" href="#">
+
+                                </a>
+                                <p class="recommend-btn">
+                                    <span>Accept?</span>
+                                    @if (comment.statefeedback == 1)
+                                    {
+
+
+
+
+
+
+
+
+
+                                        <a href="~/DoctorEnrolling/samestate?id=@comment.feedbackId" class="like-btn" style="background-color:green;color:white">
+                                            <i class="far fa-thumbs-up"></i> Yes
+                                        </a>
+
+
+
+                                        <a href="~/DoctorEnrolling/firstReject?id=@comment.feedbackId" class="dislike-btn">
+                                            <i class="far fa-thumbs-down"></i> No
+                                        </a>
+
+
+                                    }
+                      
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </li>
+            }
+
+
+        </ul>
+
+        @if (Model.Item3.Where(c=>c.statefeedback==1).Count() == 0)
+            {
+            <h3 style="text-align:center;align-items:center;color:darkred">there is No Accepted Reviews Yet</h3>
+
+            }
+
+    </div>
+
+    @*finish acceptreviews**@
+
+</div>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
+
+@if (TempData["swal_message"] == "Are you sure you want to disappear this Review?")
+{
+    <script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "@ViewBag.cancelButton",
+            allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Confirm" button
+                window.location.href = "/DoctorEnrolling/Block";
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // User clicked "Cancel" button
+                // Do nothing or add additional behavior as needed
+            }
+        });
+    </script>
+}
+
+
+@if (TempData["swal_message"] == "Are you sure you want to display this Review?")
+{
+    <script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "@ViewBag.cancelButton",
+            allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Confirm" button
+                window.location.href = "/DoctorEnrolling/Acceptt";
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // User clicked "Cancel" button
+                // Do nothing or add additional behavior as needed
+            }
+        });
+    </script>
+}
+
+
+
+@if (TempData["swal_message"] == "You cannot block this doctor. To block a doctor, they must have more than 10 appointments with a rating less than 2. Please try again.")
+{
+    <script>
+          Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+
+             allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+
+
+        }).then(function () {
+            window.location.href = "AdminDoctor";
+
+        });;
+    </script>
+}
+
+
+@if (TempData["IsAccept"] == "samestate")
+{
+    <script>
+        Swal.fire({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon",
+
+             allowOutsideClick: false, // prevent clicking outside the dialog to close it
+            allowEscapeKey: false // prevent pressing the escape key to close it
+
+
+        }).then(function () {
+            window.location.href = "MyReviews";
+
+        });;
+    </script>
+}
+<script>
+    function toggleDisplay(idToShow) {
+        var allElements = document.getElementsByClassName("appointments");
+        for (var i = 0; i < allElements.length; i++) {
+            var element = allElements[i];
+            if (element.id === idToShow) {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+
+        // Apply styling to first link
+        var firstLink = document.getElementById("prev");
+        if (idToShow === "previous-appointments") {
+            firstLink.style.fontWeight = "bold";
+            firstLink.style.color = "red";
+            firstLink.style.fontSize = "25px";
+        } else {
+            firstLink.style.fontWeight = "normal";
+            firstLink.style.color = "inherit";
+            firstLink.style.fontSize = "15px";
+        }
+
+
+
+
+        var sec = document.getElementById("upc");
+        if (idToShow === "upcoming-appointments") {
+            sec.style.fontWeight = "bold";
+            sec.style.color = "red";
+            sec.style.fontSize = "25px";
+        } else {
+            sec.style.fontWeight = "normal";
+            sec.style.color = "inherit";
+            sec.style.fontSize = "15px";
+        }
+
+
+
+
+
+
+    }
+
+
+</script>
+
